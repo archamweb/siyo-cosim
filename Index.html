@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avancement — AEP COSIM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#f7f9f8;color:#2d3748;line-height:1.55;min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+.hd{background:linear-gradient(135deg,#0f1b2d,#1c3a33);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 8px 32px rgba(15,27,45,.14)}
+.hi{max-width:1280px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hb{display:flex;align-items:center;gap:13px}
+.hlogo{width:40px;height:40px;background:#0e9f7a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.htit{font-size:15px;font-weight:600}.hsub{font-size:11.5px;color:rgba(255,255,255,.55)}
+.nv{display:flex;gap:4px;flex-wrap:wrap}
+.nb{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.72);padding:6px 14px;border-radius:20px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;transition:.15s}
+.nb:hover{background:rgba(255,255,255,.16)}
+.nb.ac{background:#0e9f7a;border-color:#0e9f7a;color:#fff}
+.sync{font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:#9aa5b1}.dot.on{background:#36d399}.dot.off{background:#f87272}
+.mn{max-width:1280px;margin:0 auto;padding:22px 24px 60px}
+.st{font-size:18px;font-weight:700;color:#0f1b2d;margin:6px 0 14px}
+.cd{background:#fff;border:1px solid #e6ebe9;border-radius:14px;padding:18px 20px;box-shadow:0 1px 3px rgba(15,27,45,.04)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.kl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#7a8a85}
+.kv{font-size:26px;font-weight:700;color:#0f1b2d}
+.kv small{font-size:13px;font-weight:500;color:#7a8a85}
+.hero{background:linear-gradient(135deg,#0f1b2d,#1c3a33);color:#fff;border:0;position:relative;overflow:hidden}
+.hero .kl{color:rgba(255,255,255,.55)}
+.hero .big{font-size:clamp(28px,5vw,44px);font-weight:600;letter-spacing:-.01em}
+.hero .big small{font-size:15px;color:rgba(255,255,255,.55);font-weight:400}
+.pbar{height:10px;background:rgba(255,255,255,.14);border-radius:6px;overflow:hidden;margin:12px 0 6px}
+.pbar>i{display:block;height:100%;background:linear-gradient(90deg,#0e9f7a,#36d399);border-radius:6px;transition:width .5s}
+.flow{display:flex;gap:0;flex-wrap:wrap;margin-top:16px;font-size:13px}
+.flow .fc{padding:8px 16px;border-right:1px solid rgba(255,255,255,.14)}
+.flow .fc:last-child{border-right:0}
+.flow .fl2{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.5)}
+.abar{display:flex;align-items:center;gap:10px;margin:7px 0}
+.abar .anm{width:120px;font-size:12.5px;color:#4a5a55;flex:none}
+.abar .atr{flex:1;height:9px;background:#edf2f0;border-radius:5px;overflow:hidden}
+.abar .atr>i{display:block;height:100%;background:#0e9f7a;border-radius:5px}
+.abar .apc{width:92px;font-size:12px;text-align:right;color:#4a5a55;flex:none}
+.fl{display:block;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#7a8a85;margin-bottom:4px}
+.fi{width:100%;padding:8px 10px;border:1px solid #d6e0dc;border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:#2d3748}
+.fi:focus{outline:2px solid #0e9f7a33;border-color:#0e9f7a}
+input[type=number].fi{font-family:'JetBrains Mono',monospace}
+.bp{background:#0e9f7a;color:#fff;border:0;padding:10px 20px;border-radius:9px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.bp:hover{background:#0c8a6a}
+.bs{background:#fff;color:#0f1b2d;border:1px solid #d6e0dc;padding:8px 16px;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+.bs:hover{background:#f0f4f2}
+.bsm{background:#f0f4f2;border:0;color:#4a5a55;padding:4px 10px;border-radius:6px;font-family:inherit;font-size:11.5px;cursor:pointer}
+.bsm:hover{background:#e2eae6}.bsm.bd{color:#c0392b}
+table.tb{width:100%;border-collapse:collapse;font-size:12.5px}
+.tb th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#7a8a85;padding:7px 8px;border-bottom:2px solid #e6ebe9;white-space:nowrap}
+.tb td{padding:6px 8px;border-bottom:1px solid #eef2f0;vertical-align:top}
+.tb td.n{font-family:'JetBrains Mono',monospace;text-align:right;white-space:nowrap;font-size:12px}
+.tb tr.grp td{background:#f0f6f4;font-weight:600;color:#1c3a33;font-size:12px}
+.tb tr.tot td{font-weight:700;border-top:2px solid #d6e0dc;background:#fafcfb}
+.tb tr.off td{color:#9aa5b1}
+.tag{display:inline-block;padding:2px 9px;border-radius:11px;font-size:10.5px;font-weight:600}
+.tag.ok{background:#e3f6ee;color:#0c8a6a}.tag.warn{background:#fdf0e3;color:#c2762a}.tag.bad{background:#fdeaea;color:#c0392b}.tag.mut{background:#eef2f0;color:#7a8a85}
+.alert{border-left:4px solid #c0392b;background:#fdf3f3;border-radius:8px;padding:10px 14px;margin:7px 0;font-size:13px}
+.alert.w{border-color:#e0902f;background:#fdf7ee}
+.note{font-size:12px;color:#7a8a85;margin-top:8px}
+.saisie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.dn-block{border:1px solid #e6ebe9;border-radius:11px;padding:14px}
+.dn-block h4{font-size:13px;color:#1c3a33;margin-bottom:10px}
+.dn-block h4 small{color:#7a8a85;font-weight:400}
+.cpt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px 14px}
+.cpt-item{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.cpt-item label{font-size:12.5px;color:#4a5a55;flex:1}
+.cpt-item input{width:74px;flex:none;text-align:right}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f1b2d;color:#fff;padding:11px 22px;border-radius:10px;font-size:13.5px;z-index:300;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{opacity:1}
+.ph{display:none}
+@media print{
+ body{background:#fff}
+ .hd,.noprint{display:none!important}
+ .mn{max-width:none;padding:0}
+ .cd{border:0;box-shadow:none;padding:0}
+ .ph{display:block;margin-bottom:14px;border-bottom:2px solid #0f1b2d;padding-bottom:10px}
+ .tb{font-size:10.5px}.tb td,.tb th{padding:4px 5px}
+ @page{size:A4 landscape;margin:12mm}
+}
+</style>
+</head>
+<body>
+<div class="hd noprint"><div class="hi">
+ <div class="hb">
+  <div class="hlogo">S</div>
+  <div><div class="htit">Avancement — AEP COSIM</div>
+  <div class="hsub">Yopougon MICAO · SIYO → PFO AFRICA · Devis N°015/SIYO/H-BTP/05/2026 · Poste B</div></div>
+ </div>
+ <div class="nv" id="nav"></div>
+ <div class="sync"><span class="dot" id="syncdot"></span><span id="synctxt">local</span>
+  <button class="bsm" onclick="reload()" title="Recharger depuis le serveur">↻</button></div>
+</div></div>
+<div class="mn" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════ CONFIG ════════════════════════ */
+const ACCESS_CODE='';            // mettre un code pour verrouiller l'accès, '' = libre
+const LS_KEY='cosim_b_db_v1';
+
+let CFG={apiUrl:'',remise:8,dateObj:'',fenetre:28,tva:18,rg:0,avance:0,contrat:'',bc:''};
+
+/* ════════════════ RÉFÉRENTIEL CHANTIER ═══════════════════ */
+const DN_REF={'200':1050,'160':210};
+const TOT_ML=1260;
+const ACTS=[
+ {k:'s',  nm:'Soudure'},
+ {k:'f',  nm:'Fouille'},
+ {k:'pr', nm:'Pose & remblai'},
+ {k:'ess',nm:'Essai pression'},
+ {k:'des',nm:'Rinçage / désinfection'}
+];
+
+/* Bordereau poste B — DQE N°015/SIYO/H-BTP/05/2026 du 19/05/2026
+   src = critère d'acquisition de la quantité facturable :
+   act   → somme d'une activité linéaire sur tous DN
+   dn    → activité linéaire sur un DN donné
+   ratio → ml posés (tous DN) × k
+   cpt   → compteur saisi directement
+   remun:false → suivie mais hors rémunération poste B (baseline récap)   */
+const BORD=[
+ {id:'b16', num:'1.6', des:'Signalisation de chantier', u:'fft', qm:1, pu:3600000, src:{t:'cpt',k:'sig'}, remun:false, grp:'1 · Travaux préparatoires'},
+ {id:'b21', num:'2.1', des:'Fouille en tranchée L 0,80 × P 1,20 m', u:'ml', qm:1260, pu:1750, src:{t:'act',a:'f'}, grp:'2 · Terrassements'},
+ {id:'b22', num:'2.2', des:'Démolition et réfection d\u2019un muret', u:'m²', qm:12, pu:25000, src:{t:'cpt',k:'muret'}},
+ {id:'b23', num:'2.3', des:'Dépose et repose de pavés', u:'m²', qm:35, pu:14700, src:{t:'cpt',k:'paves'}},
+ {id:'b24', num:'2.4', des:'Sable d\u2019apport pour lit de pose', u:'m³', qm:100.8, pu:6000, src:{t:'ratio',k:0.08}},
+ {id:'b25', num:'2.5', des:'Grille avertisseur', u:'ml', qm:1260, pu:604, src:{t:'act',a:'pr'}},
+ {id:'b26', num:'2.6', des:'Fonçage avec fourreau 315 mm (conduite DN 200)', u:'ml', qm:12, pu:65000, src:{t:'cpt',k:'fonc'}},
+ {id:'b31', num:'3.1', des:'Canalisation PEHD DN 200 PN 10', u:'ml', qm:1050, pu:31550, src:{t:'dn',dn:'200',a:'pr'}, grp:'3 · Canalisations & raccords'},
+ {id:'b32', num:'3.2', des:'Canalisation PEHD DN 160 PN 10', u:'ml', qm:210, pu:18848, src:{t:'dn',dn:'160',a:'pr'}},
+ {id:'b33', num:'3.3', des:'Coude 1/4 fonte PN 10', u:'u', qm:0, pu:360000, src:{t:'cpt',k:'c33'}},
+ {id:'b34', num:'3.4', des:'Coude 1/8 PEHD DN 200', u:'u', qm:2, pu:178000, src:{t:'cpt',k:'c34'}},
+ {id:'b35', num:'3.5', des:'Coude 1/4 PEHD DN 200', u:'u', qm:1, pu:157000, src:{t:'cpt',k:'c35'}},
+ {id:'b36', num:'3.6', des:'Té fonte DN 200×150×200', u:'u', qm:1, pu:594000, src:{t:'cpt',k:'c36'}},
+ {id:'b37', num:'3.7', des:'Té fonte DN 200×100×200', u:'u', qm:2, pu:540000, src:{t:'cpt',k:'c37'}},
+ {id:'b38', num:'3.8', des:'Adaptateur à bride PEHD DN 200', u:'u', qm:12, pu:72000, src:{t:'cpt',k:'c38'}},
+ {id:'b39', num:'3.9', des:'Adaptateur à bride PEHD DN 160', u:'u', qm:2, pu:63000, src:{t:'cpt',k:'c39'}},
+ {id:'b310',num:'3.10',des:'Adaptateur à bride PEHD DN 110', u:'u', qm:2, pu:27000, src:{t:'cpt',k:'c310'}},
+ {id:'b311',num:'3.11',des:'Plaque pleine DN 200', u:'u', qm:1, pu:144000, src:{t:'cpt',k:'c311'}},
+ {id:'b312',num:'3.12',des:'Plaque pleine DN 150', u:'u', qm:1, pu:108000, src:{t:'cpt',k:'c312'}},
+ {id:'b42', num:'4.2', des:'Robinet vanne méplat DN 200 PN 10 y/c adaptateur, joints', u:'u', qm:1, pu:450000, src:{t:'cpt',k:'c42'}, grp:'4 · Robinetterie & fontainerie'},
+ {id:'b43', num:'4.3', des:'Robinet vanne méplat DN 150 PN 10 y/c adaptateur, joints', u:'u', qm:1, pu:315000, src:{t:'cpt',k:'c43'}},
+ {id:'b44', num:'4.4', des:'Robinet vanne ronde DN 100 PN 10 y/c adaptateur, joints', u:'u', qm:2, pu:202000, src:{t:'cpt',k:'c44'}},
+ {id:'b45', num:'4.5', des:'Bouche à clé (BAC)', u:'u', qm:2, pu:22500, src:{t:'cpt',k:'c45'}},
+ {id:'b46', num:'4.6', des:'Système de vidange DN 110 y/c regard 1,00×1,00×1,20', u:'ENS', qm:1, pu:1107250, src:{t:'cpt',k:'c46'}},
+ {id:'b47', num:'4.7', des:'Système ventouse DN 80 triple fonction y/c regard 1,20×1,20×1,40', u:'ENS', qm:1, pu:1366200, src:{t:'cpt',k:'c47'}},
+ {id:'b51', num:'5.1', des:'Raccordement au réseau existant et installation de compteur', u:'fft', qm:1, pu:850000, src:{t:'cpt',k:'racc'}, grp:'5 · Travaux spéciaux'},
+ {id:'b52', num:'5.2', des:'Désinfection et rinçage de la conduite', u:'ml', qm:1260, pu:1261, src:{t:'act',a:'des'}},
+ {id:'b53', num:'5.3', des:'Mise en œuvre et essai de pression', u:'ml', qm:1260, pu:634, src:{t:'act',a:'ess'}}
+];
+const CPT_LINES=BORD.filter(l=>l.src.t==='cpt');
+const PIECES_U=BORD.filter(l=>l.u==='u');                 // pièces & robinetterie hors regards
+const REGARDS=BORD.filter(l=>l.u==='ENS');                 // 4.6 vidange + 4.7 ventouse, pièces incluses
+const RACC=BORD.find(l=>l.id==='b51');                     // raccordement SODECI
+const BASE_REMUN=BORD.filter(l=>l.remun!==false).reduce((s,l)=>s+l.qm*l.pu,0);   // 52 659 070
+const BASE_TOTALE=BORD.reduce((s,l)=>s+l.qm*l.pu,0);                              // 56 259 070
+
+/* ════════════════════════ ÉTAT ═══════════════════════════ */
+let db={};            // {date:{dn:{...},cpt:{...},obs}}
+let aleas=[];
+let V='dg', SD=new Date().toISOString().slice(0,10), attachMois=null;
+let online=null, syncing=false, lastSync=null;
+let alIdx=null;       // index aléa en édition
+
+/* ══════════════════ PERSISTANCE & SYNC ═══════════════════ */
+function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify({db,aleas,cfg:CFG}));}catch(e){}}
+function lsLoad(){try{const r=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(r){db=r.db||{};aleas=r.aleas||[];Object.assign(CFG,r.cfg||{});}}catch(e){}}
+function isConfigured(){return !!CFG.apiUrl;}
+async function apiGet(a,p={}){const u=new URL(CFG.apiUrl);u.searchParams.set('action',a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));return(await fetch(u)).json();}
+async function apiPost(a,p){return(await fetch(CFG.apiUrl,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:a,...p})})).json();}
+async function syncLoad(){if(!isConfigured())return;syncing=true;drawSync();
+ try{const r=await apiGet('loadAll');
+  if(r&&r.ok){const raw=r.reports||{};db={};
+   Object.entries(raw).forEach(([k,v])=>{if(k==='_aleas'){aleas=v||[];}else{db[k]=v;}});
+   online=true;lastSync=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});lsSave();}
+ }catch(e){online=false;}
+ syncing=false;drawSync();}
+async function syncSave(d,data){db[d]=data;lsSave();if(!isConfigured())return;syncing=true;drawSync();
+ try{const r=await apiPost('save',{date:d,data});if(r&&r.ok){online=true;lastSync=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}}catch(e){online=false;}
+ syncing=false;drawSync();}
+async function syncDel(d){delete db[d];lsSave();if(isConfigured())try{await apiPost('delete',{date:d,action:'delete'});}catch(e){}}
+async function syncAleas(){lsSave();if(isConfigured())try{await apiPost('save',{date:'_aleas',data:aleas});}catch(e){}}
+async function reload(){await syncLoad();draw();toast('Données rechargées');}
+function drawSync(){const d=document.getElementById('syncdot'),t=document.getElementById('synctxt');
+ if(!isConfigured()){d.className='dot';t.textContent='local';return;}
+ d.className='dot '+(online===false?'off':online?'on':'');
+ t.textContent=syncing?'sync…':(online?'sync '+(lastSync||''):online===false?'hors ligne':'…');}
+
+/* ═══════════════════ MOTEUR DE CUMUL ═════════════════════ */
+function emptyCu(){const dn={};Object.keys(DN_REF).forEach(d=>{dn[d]={};ACTS.forEach(a=>dn[d][a.k]=0);});
+ const cpt={};CPT_LINES.forEach(l=>cpt[l.src.k]=0);return{dn,cpt};}
+function dates(){return Object.keys(db).filter(k=>!k.startsWith('_')).sort();}
+function cumul(jusqua){const cu=emptyCu();
+ dates().forEach(d=>{if(d>jusqua)return;const r=db[d];
+  Object.keys(DN_REF).forEach(dd=>{const src=r.dn&&r.dn[dd]||{};
+   ACTS.forEach(a=>{
+    let v=+src[a.k]||0;
+    if(a.k==='pr'&&!('pr' in src))v=+src.r||0;   // migration rapports V0
+    cu.dn[dd][a.k]+=v;});});
+  CPT_LINES.forEach(l=>{cu.cpt[l.src.k]+=+(r.cpt&&r.cpt[l.src.k])||0;});});
+ return cu;}
+function actTot(cu,a){return Object.keys(DN_REF).reduce((s,d)=>s+cu.dn[d][a],0);}
+function qteLigne(l,cu){const s=l.src;
+ if(s.t==='act')return actTot(cu,s.a);
+ if(s.t==='dn')return cu.dn[s.dn][s.a];
+ if(s.t==='ratio')return actTot(cu,'pr')*s.k;
+ return cu.cpt[s.k]||0;}
+/* valorisation : reel = qtés réelles ; cap = plafonné qté marché (pour le %) */
+function valo(cu){let reel=0,cap=0;
+ BORD.forEach(l=>{if(l.remun===false)return;const q=qteLigne(l,cu);
+  reel+=q*l.pu;cap+=Math.min(q,l.qm)*l.pu;});
+ return{reel,cap,pc:BASE_REMUN>0?cap/BASE_REMUN*100:0};}
+
+/* ═══════════════════ CONTRÔLES & ALERTES ═════════════════ */
+function checkCoherence(cu){const al=[];
+ Object.keys(DN_REF).forEach(d=>{const c=cu.dn[d],T=DN_REF[d];
+  if(c.pr>c.s+0.5)al.push({t:'bad',m:`DN ${d} : posé & remblayé (${f1(c.pr)} ml) > soudé (${f1(c.s)} ml)`});
+  if(c.pr>c.f+0.5)al.push({t:'bad',m:`DN ${d} : posé & remblayé (${f1(c.pr)} ml) > fouillé (${f1(c.f)} ml)`});
+  if(c.ess>c.pr+0.5)al.push({t:'bad',m:`DN ${d} : testé (${f1(c.ess)} ml) > posé & remblayé (${f1(c.pr)} ml)`});
+  if(c.des>c.ess+0.5)al.push({t:'w',m:`DN ${d} : rincé/désinfecté (${f1(c.des)} ml) > testé (${f1(c.ess)} ml) — vérifier l'ordre des opérations`});
+  ACTS.forEach(a=>{if(c[a.k]>T+0.5)al.push({t:'bad',m:`DN ${d} : ${a.nm.toLowerCase()} ${f1(c[a.k])} ml > linéaire de référence ${T} ml`});});});
+ return al;}
+function checkDepassements(cu){const dep=[];
+ BORD.forEach(l=>{const q=qteLigne(l,cu);
+  if(q>l.qm+1e-6)dep.push({l,q,exc:q-l.qm});});
+ return dep;}
+
+/* ═══════════════════ CADENCE & PROJECTION ════════════════ */
+function cadence(){const ds=dates();if(!ds.length)return null;
+ const ref=ds[ds.length-1];
+ const seuil=new Date(ref);seuil.setDate(seuil.getDate()-CFG.fenetre);
+ const sStr=seuil.toISOString().slice(0,10);
+ const vNow=valo(cumul(ref)),vOld=valo(cumul(sStr));
+ const fcfaJ=(vNow.cap-vOld.cap)/CFG.fenetre;
+ const ptsJ=(vNow.pc-vOld.pc)/CFG.fenetre;
+ return{ref,fcfaJ,ptsJ,vNow};}
+function projection(){const c=cadence();if(!c)return null;
+ const reste=BASE_REMUN-c.vNow.cap;
+ if(reste<=0)return{termine:true};
+ if(c.fcfaJ<=0)return{noCadence:true};
+ const j=Math.ceil(reste/c.fcfaJ);
+ const fin=new Date(c.ref);fin.setDate(fin.getDate()+j);
+ return{date:fin.toISOString().slice(0,10),jours:j,fcfaJ:c.fcfaJ};}
+
+/* ═══════════════════════ HELPERS ═════════════════════════ */
+function fmt(n){return Math.round(n).toLocaleString('fr-FR');}
+function f1(n){return (Math.round(n*10)/10).toLocaleString('fr-FR');}
+function fdate(d){if(!d)return'—';const[y,m,j]=d.split('-');return`${j}/${m}/${y}`;}
+function lastDayOfMonth(ym){const[y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();}
+const MOIS=['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ═══════════════════════ NAVIGATION ══════════════════════ */
+const PAGES=[['dg','Tableau de bord'],['saisie','Saisie'],['hist','Historique'],['attach','Attachement'],['aleas','Aléas'],['params','Paramètres']];
+function go(v){V=v;draw();window.scrollTo(0,0);}
+function nav(){document.getElementById('nav').innerHTML=PAGES.map(([v,n])=>
+ `<button class="nb ${V===v?'ac':''}" onclick="go('${v}')">${n}</button>`).join('');}
+
+/* ═══════════════════ PAGE : TABLEAU DE BORD ══════════════ */
+function physStats(cu){
+ const pieces={done:PIECES_U.reduce((s,l)=>s+(cu.cpt[l.src.k]||0),0),
+               tot:PIECES_U.reduce((s,l)=>s+l.qm,0)};
+ const regards={done:REGARDS.reduce((s,l)=>s+Math.min(1,cu.cpt[l.src.k]||0),0),tot:REGARDS.length};
+ const racc=(cu.cpt[RACC.src.k]||0)>=1;
+ return{pieces,regards,racc};
+}
+/* Coefficients de pondération de l'avancement physique global (convention à valider) */
+const PCOEF={s:2,f:2,pr:2,ess:0.5,des:0.5,pieces:0.5,regards:0.5,racc:0.5};
+function avPhysGlobal(cu){
+ const ps=physStats(cu);let sum=0,tot=0;
+ ACTS.forEach(a=>{const pc=Math.min(actTot(cu,a.k),TOT_ML)/TOT_ML*100;sum+=PCOEF[a.k]*pc;tot+=PCOEF[a.k];});
+ sum+=PCOEF.pieces*(ps.pieces.tot?Math.min(ps.pieces.done,ps.pieces.tot)/ps.pieces.tot*100:0);tot+=PCOEF.pieces;
+ sum+=PCOEF.regards*(ps.regards.done/ps.regards.tot*100);tot+=PCOEF.regards;
+ sum+=PCOEF.racc*(ps.racc?100:0);tot+=PCOEF.racc;
+ return sum/tot;
+}
+function cadencePhys(){const ds=dates();if(!ds.length)return null;
+ const ref=ds[ds.length-1];
+ const seuil=new Date(ref);seuil.setDate(seuil.getDate()-CFG.fenetre);
+ const sStr=seuil.toISOString().slice(0,10);
+ const now=actTot(cumul(ref),'pr'),old=actTot(cumul(sStr),'pr');
+ return (now-old)/CFG.fenetre*7;}
+function pgDG(){
+ const ds=dates();const last=ds.length?ds[ds.length-1]:null;
+ const cu=cumul('9999-12-31');const v=valo(cu);
+ const remise=v.reel*CFG.remise/100, net=v.reel-remise;
+ const coh=checkCoherence(cu), dep=checkDepassements(cu);
+ const cad=cadence(), proj=projection(), cphys=cadencePhys();
+ const ps=physStats(cu);
+
+ /* ── SECTION 1 : AVANCEMENT PHYSIQUE ── */
+ const avg=avPhysGlobal(cu);
+ let h=`<div class="st">Avancement physique${last?` <small style="font-size:12px;font-weight:400;color:#7a8a85">— dernier rapport : ${fdate(last)}</small>`:''}</div>
+ <div class="cd" style="margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+   <div><div class="kl">Avancement physique global</div>
+    <div class="kv mono" style="font-size:34px">${avg.toFixed(1).replace('.',',')} <small>%</small></div></div>
+   <div style="flex:1;min-width:220px"><div class="atr" style="height:12px;background:#edf2f0;border-radius:6px;overflow:hidden"><i style="display:block;height:100%;width:${Math.min(100,avg)}%;background:linear-gradient(90deg,#0e9f7a,#36d399)"></i></div>
+    <div class="note">Pondéré par activités (soudure 2 · fouille 2 · pose &amp; remblai 2 · essai 0,5 · rinçage 0,5 · pièces 0,5 · regards 0,5 · raccordement 0,5)${cphys!==null?` · cadence pose &amp; remblai : ${f1(cphys)} ml/sem`:''}</div></div>
+  </div>
+ </div>
+ <div class="grid g2">
+  <div class="cd"><div class="kl" style="margin-bottom:10px">Linéaire (${fmt(TOT_ML)} ml)</div>`;
+ ACTS.forEach(a=>{const t=actTot(cu,a.k),pc=t/TOT_ML*100;
+  h+=`<div class="abar"><span class="anm">${a.nm}</span><span class="atr"><i style="width:${Math.min(100,pc)}%"></i></span><span class="apc mono">${f1(t)} ml · ${pc.toFixed(0)} %</span></div>`;});
+ h+=`<div class="note">Par DN — posé & remblayé : `;
+ Object.keys(DN_REF).forEach(d=>{h+=`DN ${d} : ${f1(cu.dn[d].pr)}/${DN_REF[d]} ml &nbsp; `;});
+ h+=`</div>
+  <button class="bs noprint" style="margin-top:10px" onclick="copyWA()">Copier le point WhatsApp (physique)</button>
+  </div>
+  <div class="cd">
+   <div class="kl" style="margin-bottom:10px">Unités &amp; ensembles</div>
+   <div class="abar"><span class="anm">Pièces &amp; robinetterie</span><span class="atr"><i style="width:${ps.pieces.tot?Math.min(100,ps.pieces.done/ps.pieces.tot*100):0}%"></i></span><span class="apc mono">${ps.pieces.done} / ${ps.pieces.tot} u</span></div>
+   <div class="note" style="margin:0 0 8px 130px">hors pièces des deux regards</div>
+   <div class="abar"><span class="anm">Regards</span><span class="atr"><i style="width:${ps.regards.done/ps.regards.tot*100}%"></i></span><span class="apc mono">${ps.regards.done} / ${ps.regards.tot}</span></div>
+   <div class="note" style="margin:0 0 8px 130px">vidange DN 110 + ventouse DN 80, pièces des regards incluses</div>
+   <div class="abar"><span class="anm">Raccordement SODECI</span><span class="atr"><i style="width:${ps.racc?100:0}%"></i></span><span class="apc">${ps.racc?'<span class="tag ok">réalisé</span>':'<span class="tag mut">à faire</span>'}</span></div>
+  </div>
+ </div>`;
+
+ /* ── SECTION 2 : AVANCEMENT FINANCIER ── */
+ h+=`<div class="st" style="margin-top:22px">Avancement financier</div>
+ <div class="cd hero">
+  <div class="kl">Montant facturable acquis — poste B (HT, avant remise)</div>
+  <div class="big mono">${fmt(v.cap)} <small>/ ${fmt(BASE_REMUN)} FCFA</small></div>
+  <div class="pbar"><i style="width:${Math.min(100,v.pc)}%"></i></div>
+  <div style="font-size:13px;color:rgba(255,255,255,.7)">Avancement facturable : <b>${v.pc.toFixed(1).replace('.',',')} %</b></div>
+  <div class="flow mono">
+   <div class="fc"><div class="fl2">Brut (qtés réelles)</div>${fmt(v.reel)}</div>
+   <div class="fc"><div class="fl2">Remise ${CFG.remise} %</div>− ${fmt(remise)}</div>
+   <div class="fc"><div class="fl2">Net facturable</div><b>${fmt(net)}</b></div>
+  </div>
+ </div>
+
+ <div class="grid g3" style="margin-top:14px">
+  <div class="cd"><div class="kl">Cadence financière (${CFG.fenetre} j)</div>
+   <div class="kv mono">${cad?fmt(cad.fcfaJ*7):'—'} <small>FCFA / sem</small></div>
+   <div class="note">${cad?cad.ptsJ>=0?(cad.ptsJ*7).toFixed(2).replace('.',',')+' pts / sem':'':'Saisir des rapports pour calculer'}</div></div>
+  <div class="cd"><div class="kl">Fin projetée</div>
+   <div class="kv">${proj?(proj.termine?'Terminé':proj.noCadence?'—':fdate(proj.date)):'—'}</div>
+   <div class="note">${proj&&proj.jours?`${proj.jours} j calendaires restants à cadence constante`:proj&&proj.noCadence?'Cadence nulle sur la fenêtre':''}${CFG.dateObj?`<br>Objectif : ${fdate(CFG.dateObj)}${proj&&proj.date?(proj.date>CFG.dateObj?' — <b style=\u0022color:#c0392b\u0022>retard prévisible</b>':' — tenu'):''}`:''}</div></div>
+  <div class="cd"><div class="kl">Alertes actives</div>
+   <div class="kv">${coh.length+dep.length}</div>
+   <div class="note">${coh.length} cohérence · ${dep.length} dépassement(s) de quantités marché</div></div>
+ </div>
+
+ <div class="cd" style="margin-top:14px"><div class="kl" style="margin-bottom:10px">Détail des alertes</div>`;
+ if(!coh.length&&!dep.length)h+=`<div class="note">Aucune incohérence ni dépassement détecté.</div>`;
+ coh.forEach(a=>{h+=`<div class="alert ${a.t==='w'?'w':''}">${a.m}</div>`;});
+ dep.forEach(d=>{h+=`<div class="alert w"><b>${d.l.num}</b> ${esc(d.l.des)} : cumul ${f1(d.q)} ${d.l.u} &gt; quantité marché ${f1(d.l.qm)} ${d.l.u} (+${f1(d.exc)}) — à faire valider par PFO</div>`;});
+ h+=`</div>`;
+
+ // aléas en cours
+ const enCours=aleas.filter(a=>a.statut!=='resolu');
+ h+=`<div class="cd" style="margin-top:14px"><div class="kl" style="margin-bottom:8px">Aléas en cours (${enCours.length})</div>`;
+ if(!enCours.length)h+=`<div class="note">Aucun aléa ouvert.</div>`;
+ enCours.forEach(a=>{h+=`<div class="alert w"><b>${esc(a.id)}</b> — ${esc(a.titre)} <span class="tag mut">${esc(a.type)}</span><br><span style="font-size:12px;color:#7a8a85">signalé le ${fdate(a.dateSignalement)}${a.perdu?` · ${a.perdu} j perdus`:''}</span></div>`;});
+ h+=`<button class="bs noprint" style="margin-top:8px" onclick="go('aleas')">Ouvrir le registre</button></div>`;
+ return h;
+}
+
+function copyWA(){
+ const ds=dates();const last=ds.length?ds[ds.length-1]:null;
+ const cu=cumul('9999-12-31');
+ const coh=checkCoherence(cu),dep=checkDepassements(cu);
+ const ps=physStats(cu);
+ let txt=`*AEP COSIM — Yopougon MICAO*\n`;
+ txt+=`Point physique au ${last?fdate(last):fdate(new Date().toISOString().slice(0,10))}\n`;
+ txt+=`Avancement physique global : *${avPhysGlobal(cu).toFixed(1).replace('.',',')} %*\n\n`;
+ txt+=`*Linéaire (${fmt(TOT_ML)} ml) :*\n`;
+ ACTS.forEach(a=>{const t=actTot(cu,a.k);
+  txt+=`• ${a.nm} : ${f1(t)} ml (${(t/TOT_ML*100).toFixed(0)} %)\n`;});
+ Object.keys(DN_REF).forEach(d=>{txt+=`DN ${d} : posé & remblayé ${f1(cu.dn[d].pr)}/${DN_REF[d]} ml\n`;});
+ txt+=`\n*Unités :*\n`;
+ txt+=`• Pièces & robinetterie : ${ps.pieces.done}/${ps.pieces.tot} u (hors pièces des regards)\n`;
+ txt+=`• Regards : ${ps.regards.done}/${ps.regards.tot} réalisés\n`;
+ txt+=`• Raccordement SODECI : ${ps.racc?'réalisé \u2705':'à faire'}\n`;
+ if(coh.length||dep.length)txt+=`\n\u26a0\ufe0f ${coh.length+dep.length} alerte(s) — voir outil\n`;
+ navigator.clipboard.writeText(txt).then(()=>toast('Point physique copié'));
+}
+
+/* ═══════════════════ PAGE : SAISIE ═══════════════════════ */
+function pgSaisie(){
+ const r=db[SD]||{dn:{},cpt:{},obs:''};
+ let h=`<div class="st">Rapport — saisie hebdomadaire</div>
+ <div class="cd">
+  <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin-bottom:16px">
+   <div><label class="fl">Date du rapport (fin de semaine)</label>
+    <input type="date" class="fi" style="width:180px" value="${SD}" onchange="SD=this.value;draw()"></div>
+   ${db[SD]?'<span class="tag ok" style="margin-bottom:10px">Rapport existant — modification</span>':'<span class="tag mut" style="margin-bottom:10px">Nouveau rapport</span>'}
+  </div>
+  <div class="grid g2">`;
+ Object.keys(DN_REF).forEach(d=>{const src=r.dn&&r.dn[d]||{};
+  h+=`<div class="dn-block"><h4>Linéaire DN ${d} <small>(réf. ${DN_REF[d]} ml)</small></h4><div class="saisie-grid">`;
+  ACTS.forEach(a=>{h+=`<div><label class="fl">${a.nm} (ml)</label>
+   <input type="number" class="fi" min="0" step="0.1" id="in_${d}_${a.k}" value="${src[a.k]||''}" placeholder="0"></div>`;});
+  h+=`</div></div>`;});
+ h+=`</div>
+  <div class="dn-block" style="margin-top:14px"><h4>Équipements, pièces & divers <small>(quantités posées dans la semaine)</small></h4>
+  <div class="cpt-grid">`;
+ CPT_LINES.forEach(l=>{h+=`<div class="cpt-item"><label>${l.num} · ${esc(l.des)}${l.remun===false?' <span class="tag mut">hors rém.</span>':''}</label>
+  <input type="number" class="fi" min="0" step="${l.u==='m²'||l.u==='ml'?'0.1':'1'}" id="in_cpt_${l.src.k}" value="${(r.cpt&&r.cpt[l.src.k])||''}" placeholder="0"></div>`;});
+ h+=`</div></div>
+  <div style="margin-top:14px"><label class="fl">Observations / faits marquants</label>
+   <textarea class="fi" rows="2" id="in_obs">${esc(r.obs)}</textarea></div>
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+   <button class="bp" onclick="saveR(false)">Enregistrer</button>
+   <button class="bp" style="background:#1c3a33" onclick="saveR(true)">Enregistrer + tableau de bord</button>
+   ${db[SD]?`<button class="bs" style="color:#c0392b" onclick="delR('${SD}')">Supprimer ce rapport</button>`:''}
+  </div>
+ </div>`;
+ return h;
+}
+function collect(){
+ const dn={};Object.keys(DN_REF).forEach(d=>{dn[d]={};
+  ACTS.forEach(a=>{dn[d][a.k]=+document.getElementById(`in_${d}_${a.k}`).value||0;});});
+ const cpt={};CPT_LINES.forEach(l=>{cpt[l.src.k]=+document.getElementById(`in_cpt_${l.src.k}`).value||0;});
+ return{dn,cpt,obs:document.getElementById('in_obs').value||''};
+}
+async function saveR(goDG){
+ const data=collect();
+ await syncSave(SD,data);
+ toast('Rapport du '+fdate(SD)+' enregistré');
+ if(goDG)go('dg');else draw();
+}
+async function delR(d){
+ if(!confirm('Supprimer le rapport du '+fdate(d)+' ?'))return;
+ await syncDel(d);toast('Rapport supprimé');go('hist');
+}
+
+/* ═══════════════════ PAGE : HISTORIQUE ═══════════════════ */
+function pgHist(){
+ const ds=dates().slice().reverse();
+ let h=`<div class="st">Historique des rapports (${ds.length})</div><div class="cd" style="overflow-x:auto">`;
+ if(!ds.length)return h+`<div class="note">Aucun rapport. La page Saisie permet d'en créer un.</div></div>`;
+ h+=`<table class="tb"><tr><th>Date</th><th style="text-align:right">Soudé (ml)</th><th style="text-align:right">Posé &amp; remblayé (ml)</th><th style="text-align:right">Montant semaine (FCFA)</th><th>Observations</th><th></th></tr>`;
+ ds.forEach(d=>{
+  const prev=new Date(d);prev.setDate(prev.getDate()-1);const pStr=prev.toISOString().slice(0,10);
+  const vS=valo(cumul(d)).reel-valo(cumul(pStr)).reel;
+  const r=db[d];let soud=0,pr=0;
+  Object.keys(DN_REF).forEach(dd=>{const s=r.dn&&r.dn[dd]||{};soud+=+s.s||0;pr+=('pr' in s)?(+s.pr||0):(+s.r||0);});
+  h+=`<tr><td>${fdate(d)}</td><td class="n">${f1(soud)}</td><td class="n">${f1(pr)}</td><td class="n">${fmt(vS)}</td><td style="max-width:300px;font-size:12px;color:#7a8a85">${esc(r.obs)}</td>
+  <td style="white-space:nowrap"><button class="bsm" onclick="SD='${d}';go('saisie')">Modifier</button> <button class="bsm bd" onclick="delR('${d}')">Suppr.</button></td></tr>`;});
+ h+=`</table></div>`;
+ return h;
+}
+
+/* ═══════════════════ PAGE : ATTACHEMENT ══════════════════ */
+const MOIS_AB=['','janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+function attachMonths(){const set=new Set();dates().forEach(d=>set.add(d.slice(0,7)));return[...set].sort();}
+function attachData(ym){
+ const[yy,mm]=ym.split('-').map(Number);
+ const finMois=`${ym}-${String(lastDayOfMonth(ym)).padStart(2,'0')}`;
+ const prev=new Date(yy,mm-1,0);const finPrec=prev.toISOString().slice(0,10);
+ const cuP=cumul(finPrec),cuC=cumul(finMois);
+ const vP=valo(cuP),vC=valo(cuC);
+ const t=CFG.tva/100,r=CFG.remise/100;
+ const mk=ht=>{const rem=ht*r,apr=ht-rem,tva=apr*t;return{ht,rem,apr,tva,ttc:apr+tva};};
+ return{yy,mm,finMois,finPrec,cuP,cuC,
+  M:mk(vC.reel),M1:mk(vP.reel),mois:mk(vC.reel-vP.reel),
+  num:String(attachMonths().indexOf(ym)+1).padStart(2,'0'),
+  lblMois:`${MOIS_AB[mm]}-${String(yy).slice(2)}`};
+}
+function pgAttach(){
+ const months=attachMonths();
+ if(!months.length)return`<div class="st">Attachement mensuel</div><div class="cd"><div class="note">Aucune donnée. Saisir au moins un rapport.</div></div>`;
+ if(!attachMois||!months.includes(attachMois))attachMois=months[months.length-1];
+ const ym=attachMois,A=attachData(ym);
+ const totMarche=BORD.filter(l=>l.remun!==false).reduce((s,l)=>s+l.qm*l.pu,0);
+
+ let h=`<div class="st noprint">Attachement mensuel &amp; certificat de paiement</div>
+ <div class="cd noprint" style="margin-bottom:14px">
+  <div style="display:flex;gap:14px;align-items:end;flex-wrap:wrap">
+   <div><label class="fl">Mois</label>
+    <select class="fi" style="width:190px" onchange="attachMois=this.value;draw()">
+     ${months.map(m=>`<option value="${m}" ${m===ym?'selected':''}>${MOIS[+m.split('-')[1]]} ${m.split('-')[0]}</option>`).join('')}
+    </select></div>
+   <div style="font-size:12.5px;color:#7a8a85;padding-bottom:9px">Attachement N°${A.num} · clôture ${fdate(A.finMois)} · antérieur ${fdate(A.finPrec)}</div>
+   <div style="flex:1"></div>
+   <button class="bs" onclick="copyAttach()">Copier (TSV)</button>
+   <button class="bp" onclick="printDoc('att')">Imprimer l'attachement</button>
+   <button class="bp" style="background:#1c3a33" onclick="printDoc('cert')">Imprimer le certificat</button>
+  </div>
+  ${CFG.rg===0&&CFG.avance===0?'<div class="note">Retenue de garantie et avance démarrage à 0 — à caler sur la commande PFO dans Paramètres si applicable.</div>':''}
+ </div>
+
+ <div id="attBlock" class="cd">
+  <div class="ph" style="display:block;border-bottom:2px solid #0f1b2d;padding-bottom:10px;margin-bottom:12px">
+   <div style="display:flex;justify-content:space-between;align-items:start;gap:10px;flex-wrap:wrap">
+    <div><b style="font-size:16px">SIYO — Hydraulique · BTP</b><br>
+     <span style="font-size:12px">${CFG.contrat?`Contrat N° : ${esc(CFG.contrat)}<br>`:''}${CFG.bc?`Bon de Commande N° : ${esc(CFG.bc)}<br>`:''}
+     Devis N°015/SIYO/H-BTP/05/2026 · Client : PFO AFRICA<br>
+     Yopougon — Dispersion des volumes de la Mé à Yopougon — Phase 1<br>
+     <b>Poste B : AEP du site de construction d'une mosquée du COSIM</b> (zone industrielle MICAO)</span></div>
+    <div style="text-align:right;font-size:13px"><b>ATTACHEMENT N°${A.num}</b><br>${fdate(A.finMois)}<br>
+     <span style="font-size:11px">Période : 01/${String(A.mm).padStart(2,'0')}/${A.yy} → ${fdate(A.finMois)}</span></div>
+   </div>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="tb">
+   <tr>
+    <th rowspan="2">Item</th><th rowspan="2">Désignation</th><th rowspan="2">U</th>
+    <th rowspan="2" style="text-align:right">Qté marché</th><th rowspan="2" style="text-align:right">PU (FCFA)</th><th rowspan="2" style="text-align:right">Prix total</th>
+    <th colspan="3" style="text-align:center;border-bottom:1px solid #e6ebe9">Quantités réalisées</th>
+    <th colspan="3" style="text-align:center;border-bottom:1px solid #e6ebe9">Montants (F CFA)</th>
+    <th rowspan="2">Observations</th></tr>
+   <tr>
+    <th style="text-align:right">Cumulé M</th><th style="text-align:right">Cumulé M-1</th><th style="text-align:right">${A.lblMois}</th>
+    <th style="text-align:right">Cumulé M</th><th style="text-align:right">Cumulé M-1</th><th style="text-align:right">${A.lblMois}</th></tr>`;
+ let lastGrp='';
+ BORD.forEach(l=>{
+  if(l.grp&&l.grp!==lastGrp){lastGrp=l.grp;h+=`<tr class="grp"><td colspan="13">${l.grp}</td></tr>`;}
+  const qP=qteLigne(l,A.cuP),qC=qteLigne(l,A.cuC),qM=Math.max(0,qC-qP);
+  const off=l.remun===false, depas=qC>l.qm+1e-6;
+  let obs=[];if(off)obs.push('Hors rémunération poste B');if(depas&&!off)obs.push(`Dépassement +${f1(qC-l.qm)} ${l.u} — à valider PFO`);
+  h+=`<tr class="${off?'off':''}">
+   <td>${l.num}</td><td>${esc(l.des)}</td><td>${l.u}</td>
+   <td class="n">${f1(l.qm)}</td><td class="n">${fmt(l.pu)}</td><td class="n">${off?'—':fmt(l.qm*l.pu)}</td>
+   <td class="n">${qC?f1(qC):'-'}</td><td class="n">${qP?f1(qP):'-'}</td><td class="n">${qM?'<b>'+f1(qM)+'</b>':'-'}</td>
+   <td class="n">${off||!qC?'-':fmt(qC*l.pu)}</td><td class="n">${off||!qP?'-':fmt(qP*l.pu)}</td><td class="n">${off||!qM?'-':fmt(qM*l.pu)}</td>
+   <td style="font-size:11px;color:${depas?'#c0392b':'#7a8a85'}">${obs.join(' · ')}</td></tr>`;});
+ const F=(lbl,M,M1,mo,bold)=>`<tr class="tot"><td colspan="5">${lbl}</td><td class="n">${fmt(totMarcheRow(lbl))}</td>
+  <td colspan="3"></td>
+  <td class="n">${bold?'<b>'+fmt(M)+'</b>':fmt(M)}</td><td class="n">${M1?fmt(M1):'-'}</td><td class="n">${bold?'<b>'+fmt(mo)+'</b>':fmt(mo)}</td><td></td></tr>`;
+ function totMarcheRow(lbl){
+  const t=CFG.tva/100,r=CFG.remise/100;
+  if(lbl.startsWith('TOTAL HT APRÈS'))return totMarche*(1-r);
+  if(lbl.startsWith('REMISE'))return totMarche*r;
+  if(lbl.startsWith('TVA'))return totMarche*(1-r)*t;
+  if(lbl.startsWith('TOTAL TTC'))return totMarche*(1-r)*(1+t);
+  return totMarche;}
+ h+=F('TOTAL HT',A.M.ht,A.M1.ht,A.mois.ht);
+ h+=F(`REMISE EXCEPTIONNELLE (${CFG.remise} %)`,A.M.rem,A.M1.rem,A.mois.rem);
+ h+=F('TOTAL HT APRÈS REMISE',A.M.apr,A.M1.apr,A.mois.apr);
+ h+=F(`TVA (${CFG.tva} %)`,A.M.tva,A.M1.tva,A.mois.tva);
+ h+=F('TOTAL TTC',A.M.ttc,A.M1.ttc,A.mois.ttc,true);
+ h+=`</table></div>
+ <div class="note noprint">Quantités non plafonnées : les dépassements restent valorisés et signalés en Observations — régularisation contradictoire avec PFO. Remise et TVA appliquées au prorata de chaque période.</div>
+ <table style="width:100%;font-size:12px;margin-top:34px"><tr>
+  <td style="width:50%">Pour SIYO<br><br><br>____________________</td>
+  <td style="width:50%">Pour PFO AFRICA<br><br><br>____________________</td></tr></table>
+ </div>
+
+ <!-- ── CERTIFICAT DE PAIEMENT PROVISOIRE ── -->
+ ${(()=>{
+  const avTot=totMarche*(1-CFG.remise/100)*(1+CFG.tva/100)*CFG.avance/100;   // avance démarrage sur TTC marché
+  const rembM=Math.min(A.mois.ttc*CFG.avance/100,avTot);                      // récupération linéaire
+  const rgM=A.mois.ttc*CFG.rg/100;
+  const valide=A.mois.ttc-rembM-rgM;
+  const L=(lbl,vT,vM1,vM,strong)=>`<tr><td style="padding:4px 8px">${lbl}</td>
+   <td class="n" style="padding:4px 8px">${vT===null?'-':fmt(vT)}</td>
+   <td class="n" style="padding:4px 8px">${vM1===null?'-':fmt(vM1)}</td>
+   <td class="n" style="padding:4px 8px">${strong?'<b>'+fmt(vM)+'</b>':vM===null?'-':fmt(vM)}</td></tr>`;
+  return`<div id="certBlock" class="cd" style="margin-top:16px">
+  <div style="text-align:center;margin-bottom:12px"><b style="font-size:15px">PFO AFRICA — Certificat de Paiement Provisoire</b><br>
+   <span style="font-size:11.5px;color:#4a5a55">☐ Avance démarrage &nbsp;&nbsp; ☒ Facture d'avancement &nbsp;&nbsp; ☐ Facture finale</span></div>
+  <table class="tb" style="margin-bottom:12px">
+   <tr><td style="width:55%">${CFG.contrat?`Contrat N° : <b>${esc(CFG.contrat)}</b><br>`:''}${CFG.bc?`Bon de Commande N° : <b>${esc(CFG.bc)}</b><br>`:''}
+    Client : <b>PFO AFRICA</b> · Entreprise : <b>SIYO</b><br>
+    Projet : Dispersion des volumes de la Mé à Yopougon — Phase 1<br>Poste B — AEP site mosquée COSIM (Yopougon MICAO)</td>
+   <td style="text-align:right">N° du certificat : <b>${A.num}</b><br>Date : <b>${fdate(A.finMois)}</b></td></tr>
+  </table>
+  <table class="tb">
+   <tr class="grp"><td colspan="4">Montants marché (poste B rémunéré)</td></tr>
+   <tr><td>Montant HT après remise ${CFG.remise} % · TTC (TVA ${CFG.tva} %)</td>
+    <td class="n" colspan="3">${fmt(totMarche*(1-CFG.remise/100))} HT · ${fmt(totMarche*(1-CFG.remise/100)*(1+CFG.tva/100))} TTC</td></tr>
+   <tr class="grp"><td>Avancement (TTC)</td><td style="text-align:right"><b>Cumulé total</b></td><td style="text-align:right"><b>Cumulé M-1</b></td><td style="text-align:right"><b>Mois M</b></td></tr>
+   ${L('Montant des travaux',A.M.ttc,A.M1.ttc,A.mois.ttc)}
+   ${CFG.avance>0?L(`Remboursement avance démarrage (${CFG.avance} %)`,null,null,-rembM):''}
+   ${CFG.rg>0?L(`Retenue de garantie (${CFG.rg} %)`,null,null,-rgM):''}
+   ${L('<b>Montant validé pour ce certificat</b>',null,null,valide,true)}
+  </table>
+  <table style="width:100%;font-size:11.5px;margin-top:26px"><tr>
+   <td style="width:33%">Entreprise : SIYO<br>Nom :<br>Date :<br><br>Signature</td>
+   <td style="width:33%">PFO — Chef de projet<br>Nom :<br>Date :<br><br>Signature</td>
+   <td style="width:33%">PFO — Direction Générale<br>Nom :<br>Date :<br><br>Signature</td></tr></table>
+  </div>`;})()}`;
+ return h;
+}
+function printDoc(mode){
+ document.body.dataset.print=mode;
+ let st=document.getElementById('printOrient');
+ if(!st){st=document.createElement('style');st.id='printOrient';document.head.appendChild(st);}
+ st.textContent=`@media print{${mode==='att'?'#certBlock{display:none!important}@page{size:A4 landscape;margin:10mm}':'#attBlock{display:none!important}@page{size:A4 portrait;margin:14mm}'}}`;
+ window.print();
+}
+window.addEventListener('afterprint',()=>{delete document.body.dataset.print;});
+function copyAttach(){
+ const A=attachData(attachMois);
+ let txt='Item\tDésignation\tU\tQté marché\tPU\tPrix total\tQté Cumulé M\tQté Cumulé M-1\tQté '+A.lblMois+'\tMt Cumulé M\tMt Cumulé M-1\tMt '+A.lblMois+'\n';
+ BORD.forEach(l=>{const qP=qteLigne(l,A.cuP),qC=qteLigne(l,A.cuC),qM=Math.max(0,qC-qP);
+  const off=l.remun===false;
+  txt+=`${l.num}\t${l.des}\t${l.u}\t${l.qm}\t${l.pu}\t${off?0:Math.round(l.qm*l.pu)}\t${Math.round(qC*10)/10}\t${Math.round(qP*10)/10}\t${Math.round(qM*10)/10}\t${off?0:Math.round(qC*l.pu)}\t${off?0:Math.round(qP*l.pu)}\t${off?0:Math.round(qM*l.pu)}\n`;});
+ navigator.clipboard.writeText(txt).then(()=>toast('Attachement copié (TSV)'));
+}
+
+/* ═══════════════════ PAGE : ALÉAS ════════════════════════ */
+function pgAleas(){
+ let h=`<div class="st">Registre des aléas (${aleas.length})</div>`;
+ h+=`<div class="cd" style="margin-bottom:14px"><div class="kl" style="margin-bottom:10px">${alIdx===null?'Nouvel aléa':'Modifier '+esc(aleas[alIdx].id)}</div>
+ <div class="grid g3">
+  <div><label class="fl">Titre</label><input class="fi" id="al_titre" value="${alIdx!==null?esc(aleas[alIdx].titre):''}"></div>
+  <div><label class="fl">Type</label><select class="fi" id="al_type">
+   ${['technique','reaffectation','avenant','intemperie','approvisionnement','client','autre'].map(t=>`<option ${alIdx!==null&&aleas[alIdx].type===t?'selected':''}>${t}</option>`).join('')}</select></div>
+  <div><label class="fl">Statut</label><select class="fi" id="al_statut">
+   <option value="en_cours" ${alIdx!==null&&aleas[alIdx].statut==='en_cours'?'selected':''}>En cours</option>
+   <option value="resolu" ${alIdx!==null&&aleas[alIdx].statut==='resolu'?'selected':''}>Résolu</option></select></div>
+  <div><label class="fl">Date signalement</label><input type="date" class="fi" id="al_ds" value="${alIdx!==null?aleas[alIdx].dateSignalement||'':new Date().toISOString().slice(0,10)}"></div>
+  <div><label class="fl">Date résolution</label><input type="date" class="fi" id="al_dr" value="${alIdx!==null?aleas[alIdx].dateResolution||'':''}"></div>
+  <div><label class="fl">Jours perdus</label><input type="number" class="fi" id="al_perdu" min="0" value="${alIdx!==null?aleas[alIdx].perdu||0:0}"></div>
+ </div>
+ <div style="margin-top:10px"><label class="fl">Description</label><textarea class="fi" rows="2" id="al_desc">${alIdx!==null?esc(aleas[alIdx].description):''}</textarea></div>
+ <div style="margin-top:10px"><label class="fl">Références (email, courrier, PV…)</label><input class="fi" id="al_ref" value="${alIdx!==null?esc(aleas[alIdx].references):''}"></div>
+ <div style="display:flex;gap:10px;margin-top:14px">
+  <button class="bp" onclick="saveAlea()">${alIdx===null?'Ajouter l\u2019aléa':'Enregistrer'}</button>
+  ${alIdx!==null?'<button class="bs" onclick="alIdx=null;draw()">Annuler</button>':''}
+ </div></div>`;
+ aleas.slice().reverse().forEach((a,ri)=>{const i=aleas.length-1-ri;
+  h+=`<div class="cd" style="margin-bottom:10px">
+   <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div><b>${esc(a.id)}</b> — ${esc(a.titre)} <span class="tag ${a.statut==='resolu'?'ok':'warn'}">${a.statut==='resolu'?'résolu':'en cours'}</span> <span class="tag mut">${esc(a.type)}</span></div>
+    <div><button class="bsm" onclick="alIdx=${i};draw();window.scrollTo(0,0)">Modifier</button>
+     <button class="bsm bd" onclick="delAlea(${i})">Suppr.</button></div>
+   </div>
+   <div style="font-size:12.5px;color:#4a5a55;margin-top:4px">${esc(a.description)}</div>
+   <div style="font-size:11.5px;color:#7a8a85;margin-top:4px">Signalé le ${fdate(a.dateSignalement)}${a.dateResolution?' · résolu le '+fdate(a.dateResolution):''}${a.perdu?` · <b>${a.perdu} j perdus</b>`:''}${a.references?' · réf. : '+esc(a.references):''}</div>
+  </div>`;});
+ return h;
+}
+async function saveAlea(){
+ const o={
+  titre:document.getElementById('al_titre').value.trim(),
+  type:document.getElementById('al_type').value,
+  statut:document.getElementById('al_statut').value,
+  dateSignalement:document.getElementById('al_ds').value,
+  dateResolution:document.getElementById('al_dr').value||null,
+  perdu:+document.getElementById('al_perdu').value||0,
+  description:document.getElementById('al_desc').value.trim(),
+  references:document.getElementById('al_ref').value.trim()
+ };
+ if(!o.titre){toast('Titre requis');return;}
+ if(alIdx===null){o.id='AL-'+String(aleas.length+1).padStart(3,'0');aleas.push(o);}
+ else{o.id=aleas[alIdx].id;aleas[alIdx]=o;}
+ alIdx=null;await syncAleas();toast('Aléa enregistré');draw();
+}
+async function delAlea(i){
+ if(!confirm('Supprimer '+aleas[i].id+' ?'))return;
+ aleas.splice(i,1);alIdx=null;await syncAleas();draw();
+}
+
+/* ═══════════════════ PAGE : PARAMÈTRES ═══════════════════ */
+function pgParams(){
+ return`<div class="st">Paramètres</div>
+ <div class="cd">
+  <div class="grid g3">
+   <div><label class="fl">Remise contractuelle (%)</label><input type="number" class="fi" id="p_rem" step="0.1" value="${CFG.remise}"></div>
+   <div><label class="fl">TVA (%)</label><input type="number" class="fi" id="p_tva" step="0.1" value="${CFG.tva}"></div>
+   <div><label class="fl">Retenue de garantie (%) — selon commande PFO</label><input type="number" class="fi" id="p_rg" step="0.1" value="${CFG.rg}"></div>
+   <div><label class="fl">Avance démarrage (%) — selon commande PFO</label><input type="number" class="fi" id="p_av" step="0.1" value="${CFG.avance}"></div>
+   <div><label class="fl">N° de contrat</label><input class="fi" id="p_ct" value="${esc(CFG.contrat)}" placeholder="ex. DPH/…-CST-SIYO-…"></div>
+   <div><label class="fl">N° de bon de commande</label><input class="fi" id="p_bc" value="${esc(CFG.bc)}" placeholder="ex. BC9…"></div>
+   <div><label class="fl">Date objectif de fin (optionnel)</label><input type="date" class="fi" id="p_obj" value="${CFG.dateObj}"></div>
+   <div><label class="fl">Fenêtre de cadence (jours)</label><input type="number" class="fi" id="p_fen" min="7" value="${CFG.fenetre}"></div>
+  </div>
+  <div style="margin-top:12px"><label class="fl">URL du script de synchronisation (Google Apps Script) — vide = mode local</label>
+   <input class="fi" id="p_api" value="${esc(CFG.apiUrl)}" placeholder="https://script.google.com/macros/s/…/exec"></div>
+  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+   <button class="bp" onclick="saveCfg()">Enregistrer les paramètres</button>
+   <button class="bs" onclick="exportJSON()">Exporter les données (JSON)</button>
+   <button class="bs" onclick="document.getElementById('p_file').click()">Importer un export JSON</button>
+   <input type="file" id="p_file" accept=".json" style="display:none" onchange="importJSON(this.files[0])">
+  </div>
+  <div class="note">Contrat de synchronisation identique à l'app Kimoukro (actions loadAll / save / delete) : une copie du script existant peut être réutilisée avec une nouvelle feuille de stockage. Les aléas sont synchronisés sous la clé spéciale <span class="mono">_aleas</span>.</div>
+ </div>
+ <div class="cd" style="margin-top:14px">
+  <div class="kl" style="margin-bottom:8px">Référentiel contractuel (lecture seule)</div>
+  <div style="font-size:13px">
+   Baseline rémunérée poste B : <b class="mono">${fmt(BASE_REMUN)} FCFA HT</b> (récapitulatif du devis)<br>
+   Total détail poste B y compris signalisation : <span class="mono">${fmt(BASE_TOTALE)} FCFA HT</span><br>
+   Ligne 1.6 Signalisation (3 600 000 FCFA) : suivie mais <b>hors rémunération</b> — arbitrage du ${fdate('2026-06-09')}<br>
+   Linéaire : DN 200 → 1 050 ml · DN 160 → 210 ml · total 1 260 ml<br>
+   ${BORD.length} lignes de bordereau · ${CPT_LINES.length} compteurs directs · remise appliquée au prorata des décomptes
+  </div>
+ </div>`;
+}
+async function saveCfg(){
+ CFG.remise=+document.getElementById('p_rem').value||0;
+ CFG.tva=+document.getElementById('p_tva').value||0;
+ CFG.rg=+document.getElementById('p_rg').value||0;
+ CFG.avance=+document.getElementById('p_av').value||0;
+ CFG.contrat=document.getElementById('p_ct').value.trim();
+ CFG.bc=document.getElementById('p_bc').value.trim();
+ CFG.dateObj=document.getElementById('p_obj').value||'';
+ CFG.fenetre=Math.max(7,+document.getElementById('p_fen').value||28);
+ const newApi=document.getElementById('p_api').value.trim();
+ const changed=newApi!==CFG.apiUrl;CFG.apiUrl=newApi;
+ lsSave();toast('Paramètres enregistrés');
+ if(changed&&isConfigured())await syncLoad();
+ draw();
+}
+function exportJSON(){
+ const out={meta:{projet:'AEP COSIM — Yopougon MICAO (poste B, devis 015/SIYO/H-BTP/05/2026)',contractant:'SIYO',client:'PFO AFRICA',
+  genere_le:new Date().toISOString(),nb_rapports:dates().length,baseline_remuneree:BASE_REMUN},
+  cfg:CFG,rapports:db,aleas};
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));
+ a.download='Export_COSIM_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+function importJSON(file){
+ if(!file)return;const fr=new FileReader();
+ fr.onload=()=>{try{const o=JSON.parse(fr.result);
+  if(!o.rapports)throw 0;
+  if(!confirm('Remplacer les données locales par cet export ('+Object.keys(o.rapports).length+' rapports) ?'))return;
+  db=o.rapports;aleas=o.aleas||[];if(o.cfg)Object.assign(CFG,o.cfg);
+  lsSave();draw();toast('Import terminé');
+ }catch(e){toast('Fichier invalide');}};
+ fr.readAsText(file);
+}
+
+/* ═══════════════════════ RENDU ═══════════════════════════ */
+function draw(){
+ nav();drawSync();
+ const app=document.getElementById('app');
+ app.innerHTML=({dg:pgDG,saisie:pgSaisie,hist:pgHist,attach:pgAttach,aleas:pgAleas,params:pgParams}[V]||pgDG)();
+}
+function checkAccess(){
+ if(!ACCESS_CODE)return true;
+ if(sessionStorage.getItem('cosim_auth')==='1')return true;
+ const c=prompt('Code d\u2019accès — Avancement COSIM');
+ if(c===ACCESS_CODE){sessionStorage.setItem('cosim_auth','1');return true;}
+ document.body.innerHTML='<div style="font-family:DM Sans,sans-serif;text-align:center;padding:80px;color:#5a6778"><h2>Accès refusé</h2><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#0e9f7a;color:#fff;border:0;border-radius:8px;cursor:pointer">Réessayer</button></div>';
+ return false;
+}
+async function init(){
+ if(!checkAccess())return;
+ lsLoad();draw();
+ if(isConfigured()){await syncLoad();draw();}
+}
+init();
+</script>
+</body>
+</html>
