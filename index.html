@@ -107,7 +107,7 @@ table.tb{width:100%;border-collapse:collapse;font-size:12.5px}
 const ACCESS_CODE='';            // mettre un code pour verrouiller l'accès, '' = libre
 const LS_KEY='cosim_b_db_v1';
 
-let CFG={apiUrl:'',remise:8,dateObj:'',fenetre:28,tva:18,rg:0,avance:0,contrat:'',bc:''};
+let CFG={apiUrl:'https://script.google.com/macros/s/AKfycbwS2K6nhaVTNAvCPFA3OHIrourFBg2RTUudh13q9pOTXUQlfQYYtlIJTUsxwhcxv4QSPg/exec',remise:8,dateObj:'',fenetre:28,tva:18,rg:0,avance:0,contrat:'',bc:''};
 
 /* ════════════════ RÉFÉRENTIEL CHANTIER ═══════════════════ */
 const DN_REF={'200':1050,'160':210};
@@ -173,7 +173,8 @@ let alIdx=null;       // index aléa en édition
 
 /* ══════════════════ PERSISTANCE & SYNC ═══════════════════ */
 function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify({db,aleas,cfg:CFG}));}catch(e){}}
-function lsLoad(){try{const r=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(r){db=r.db||{};aleas=r.aleas||[];Object.assign(CFG,r.cfg||{});}}catch(e){}}
+function lsLoad(){const HARD=CFG.apiUrl;try{const r=JSON.parse(localStorage.getItem(LS_KEY)||'null');if(r){db=r.db||{};aleas=r.aleas||[];Object.assign(CFG,r.cfg||{});}}catch(e){}
+ if(!CFG.apiUrl&&HARD){CFG.apiUrl=HARD;}}  // une URL codée en dur ne doit jamais être écrasée par une config locale vide
 function isConfigured(){return !!CFG.apiUrl;}
 async function apiGet(a,p={}){const u=new URL(CFG.apiUrl);u.searchParams.set('action',a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));return(await fetch(u)).json();}
 async function apiPost(a,p){return(await fetch(CFG.apiUrl,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:a,...p})})).json();}
