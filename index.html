@@ -178,10 +178,20 @@ function lsLoad(){const HARD=CFG.apiUrl;try{const r=JSON.parse(localStorage.getI
 function isConfigured(){return !!CFG.apiUrl;}
 async function apiGet(a,p={}){const u=new URL(CFG.apiUrl);u.searchParams.set('action',a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));return(await fetch(u)).json();}
 async function apiPost(a,p){return(await fetch(CFG.apiUrl,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:a,...p})})).json();}
+function normDateKey(k){
+ if(k==null)return null;
+ if(k==='_aleas')return k;
+ if(/^\d{4}-\d{2}-\d{2}$/.test(k))return k;                 // déjà au bon format
+ const d=new Date(k);                                        // "Wed Jun 10 2026…" ou ISO
+ if(!isNaN(d))return d.toISOString().slice(0,10);            // → AAAA-MM-JJ
+ return null;                                                // illisible : on ignore
+}
 async function syncLoad(){if(!isConfigured())return;syncing=true;drawSync();
  try{const r=await apiGet('loadAll');
   if(r&&r.ok){const raw=r.reports||{};db={};
-   Object.entries(raw).forEach(([k,v])=>{if(k==='_aleas'){aleas=v||[];}else{db[k]=v;}});
+   Object.entries(raw).forEach(([k,v])=>{
+    if(k==='_aleas'){aleas=v||[];return;}
+    const nk=normDateKey(k);if(nk)db[nk]=v;});
    online=true;lastSync=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});lsSave();}
  }catch(e){online=false;}
  syncing=false;drawSync();}
@@ -255,7 +265,11 @@ function projection(){const c=cadence();if(!c)return null;
 /* ═══════════════════════ HELPERS ═════════════════════════ */
 function fmt(n){return Math.round(n).toLocaleString('fr-FR');}
 function f1(n){return (Math.round(n*10)/10).toLocaleString('fr-FR');}
-function fdate(d){if(!d)return'—';const[y,m,j]=d.split('-');return`${j}/${m}/${y}`;}
+function fdate(d){if(!d)return'—';
+ if(d instanceof Date){if(isNaN(d))return'—';d=d.toISOString().slice(0,10);}
+ const s=String(d);
+ if(!/^\d{4}-\d{2}-\d{2}/.test(s)){const x=new Date(s);if(!isNaN(x))d=x.toISOString().slice(0,10);else return s;}
+ const[y,m,j]=String(d).slice(0,10).split('-');return`${j}/${m}/${y}`;}
 function lastDayOfMonth(ym){const[y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();}
 const MOIS=['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
